@@ -43,6 +43,7 @@ int expand_bit_depth(byte row, byte foreground);
 byte reduce_bit_depth(int row, int foregroundRow);
 void reduce_bit_depth_sp(int* TileRows, int* bufferValues);
 byte print_character(byte chr, int x, int y);
+byte print_character2(int chr, int x, int y);
 byte print_character_formatted(int chr, int x, int y, int font, int foreground);
 byte print_character_to_window(byte chr, WINDOW* window);
 void print_special_character(int tile, int x, int y);

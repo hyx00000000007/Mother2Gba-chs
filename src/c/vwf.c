@@ -266,6 +266,11 @@ byte print_character(byte chr, int x, int y)
     return print_character_formatted(chr, x, y, 0, 0xF);
 }
 
+byte print_character2(int chr, int x, int y)
+{
+    return print_character_formatted(chr, x, y, 0, 0xF);
+}
+
 byte print_character_formatted(int chr, int x, int y, int font, int foreground)
 {
     // 0x64 to 0x6C (inclusive) is YOU WON
@@ -851,7 +856,16 @@ int print_string(byte *str, int x, int y)
 
     while (str[1] != 0xFF)
     {
-        x += print_character(decode_character(*str++), x, y);
+        if (*str < CHAR_OFFSET)
+        {
+            int ch = (*str + 0xa1) << 8 | *(str + 1);
+            x += print_character2(ch, x, y);
+            str += 2;
+        }
+        else
+        {
+            x += print_character(decode_character(*str++), x, y);
+        }
         charCount++;
     }
 
@@ -877,7 +891,16 @@ int print_string_edited(byte *str, int x, int y)
     {
         if(str[1] != 0xFF)
         {
-            x += print_character(decode_character(*str++), x, y);
+            if (*str < CHAR_OFFSET)
+            {
+                int ch = (*str + 0xa1) << 8 | *(str + 1);
+                x += print_character2(ch, x, y);
+                str += 2;
+            }
+            else
+            {
+                x += print_character(decode_character(*str++), x, y);
+            }
             charCount++;
         }
         else if(str[0] == 0x5F)
@@ -969,7 +992,16 @@ int print_menu_string(WINDOW* window)
         }
         else
         {
-            x += print_character(decode_character(*menu_text++), x, y);
+            if (*menu_text < CHAR_OFFSET)
+            {
+                int ch = (*menu_text + 0xa1) << 8 | *(menu_text + 1);
+                x += print_character2(ch, x, y);
+                menu_text += 2;
+            }
+            else
+            {
+                x += print_character(decode_character(*menu_text++), x, y);
+            }
             charCount++;
         }
     }
